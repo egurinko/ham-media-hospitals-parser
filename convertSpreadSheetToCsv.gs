@@ -1,5 +1,3 @@
-// Google SpreadSheet の都道府県別病院リストシートを、CSV に書き出してくれるやつです
-
 function saveCSV() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   const sheets = ss.getSheets();
@@ -7,11 +5,13 @@ function saveCSV() {
   const dir = DriveApp.createFolder(ss.getName().toLowerCase().replace(/ /g,'_') + '_csv_' + new Date().getTime());
   
   for (const sheet of sheets){
-    const fileName = sheet.getName() + ".csv";
-    const csvContent = convertRangeToCsvContent(fileName, sheet);
-    const blob = Utilities.newBlob("", "text/csv", fileName).setDataFromString(csvContent);
-    
-    dir.createFile(blob);
+    if(sheet.getName() !== "はじめに" && sheet.getName() !== "エキゾ専門"){
+      const fileName = sheet.getName() + ".csv";
+      const csvContent = convertRangeToCsvContent(fileName, sheet);
+      const blob = Utilities.newBlob("", "text/csv", fileName).setDataFromString(csvContent);
+      
+      dir.createFile(blob);
+    }
   }
 }
 
